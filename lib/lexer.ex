@@ -18,6 +18,24 @@ defmodule Monkey.Lexer do
   # Removes White space
   defguardp is_whitespace(c) when c in ~c[\s\r\n\t]
 
+  @doc """
+    Returns the List of token from the string.
+    
+    ## Example
+    iex> Monkey.Lexer.init("=+(){},;`")
+    [
+      :assign,
+      :plus,
+      :lparen,
+      :rparen,
+      :lsquirly,
+      :rsquirly,
+      :comma,
+      :semicolon,
+      {:illegal, "`"},
+      :eof
+    ]
+  """
   @spec init(String.t()) :: [token()]
   def init(input) when is_binary(input) do
     lex(input, [])
@@ -40,6 +58,7 @@ defmodule Monkey.Lexer do
     lex(rest, [token | tokens])
   end
 
+  # Extracts the token and return it and the rest of the string.
   @spec tokenize(input :: String.t()) :: {token(), rest :: String.t()}
   defp tokenize(input) do
     case input do

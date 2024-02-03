@@ -1,6 +1,7 @@
 # Monkey
 
 **TODO: Add description**
+Heavly inspired from [this](https://github.com/ThePrimeagen/ts-rust-zig-deez/blob/master/elixir/lib/lexer.ex) just thought the language is cool from this. So giving it a try.
 
 ## Installation
 
