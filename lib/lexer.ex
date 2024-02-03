@@ -6,6 +6,7 @@ defmodule Monkey.Lexer do
   @type token ::
           :assign
           | :plus
+          | :minus
           | :lparen
           | :rparen
           | :lsquirly
@@ -13,10 +14,13 @@ defmodule Monkey.Lexer do
           | :comma
           | :semicolon
           | :eof
+          | {:int, String.t()}
           | {:illegal, String.t()}
 
-  # Removes White space
+  # Checks White space
   defguardp is_whitespace(c) when c in ~c[\s\r\n\t]
+  # Checks a number
+  defguardp is_digit(c) when c in ?0..?9
 
   @doc """
     Returns the List of token from the string.
@@ -63,6 +67,7 @@ defmodule Monkey.Lexer do
   defp tokenize(input) do
     case input do
       <<"=", rest::binary>> -> {:assign, rest}
+      <<"-", rest::binary>> -> {:plus, rest}
       <<"+", rest::binary>> -> {:plus, rest}
       <<"(", rest::binary>> -> {:lparen, rest}
       <<")", rest::binary>> -> {:rparen, rest}
@@ -70,7 +75,22 @@ defmodule Monkey.Lexer do
       <<"}", rest::binary>> -> {:rsquirly, rest}
       <<",", rest::binary>> -> {:comma, rest}
       <<";", rest::binary>> -> {:semicolon, rest}
+      <<c::8, rest::binary>> when is_digit(c) -> read_number(rest, <<c>>)
+      # The illegal is the catchall needs to be last. In this coding style.
       <<c::8, rest::binary>> -> {{:illegal, <<c>>}, rest}
+    end
+  end
+
+  # Reads the number until a non digit character and then return the number token and rest of the data.
+  @spec read_number(input :: String.t(), iodata()) :: {token(), rest :: String.t()}
+  defp read_number(input, acc) do
+    case input do
+      <<c::8, rest::binary>> when is_digit(c) ->
+        read_number(rest, [acc | <<c>>])
+
+      # this is the catchall and needs to be last, In this coding style.
+      <<rest::binary>> ->
+        {{:int, IO.iodata_to_binary(acc)}, rest}
     end
   end
 end
