@@ -3,4 +3,7 @@ defmodule Monkey do
   The interpretor which will run the code.
   """
 
+  def init() do
+    Monkey.Repl.start()
+  end
 end
