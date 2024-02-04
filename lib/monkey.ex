@@ -1,22 +1,9 @@
 defmodule Monkey do
   @moduledoc """
-  Documentation for `Monkey`.
+  The interpretor which will run the code.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Monkey.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
-
-  def x() do
-    hello()
+  def init() do
+    Monkey.Repl.start()
   end
 end
