@@ -13,6 +13,8 @@ defmodule Monkey.Lexer do
 
   @type token ::
           :assign
+          | :equal
+          | :notEqual
           | :plus
           | :minus
           | :bang
@@ -80,6 +82,8 @@ defmodule Monkey.Lexer do
   @spec tokenize(input :: String.t()) :: {token(), rest :: String.t()}
   defp tokenize(input) do
     case input do
+      <<"==", rest::binary>> -> {:equal, rest}
+      <<"!=", rest::binary>> -> {:notEqual, rest}
       <<">", rest::binary>> -> {:greaterThan, rest}
       <<"<", rest::binary>> -> {:lessThan, rest}
       <<"=", rest::binary>> -> {:assign, rest}

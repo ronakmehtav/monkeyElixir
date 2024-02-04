@@ -26,6 +26,15 @@ defmodule MonkeyLexerTest do
     assert Monkey.Lexer.init(input_string) == expected_output
   end
 
+  test "Equal or not Equal" do
+    input_string = "2 != 4"
+    expected_output = [{:int, "2"}, :notEqual, {:int, "4"}, :eof]
+    assert Monkey.Lexer.init(input_string) == expected_output
+    input_string = "true == true"
+    expected_output = [true, :equal, true, :eof]
+    assert Monkey.Lexer.init(input_string) == expected_output
+  end
+
   test "keywords inital" do
     input_string = "let a = fn x -> x + 31;"
 
